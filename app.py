@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, request
 from models import db, connect_db, User
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://tmevcpalijcgdr:d512b826b1bf39a3a1bbd437db05602b3fde63a888ca9a9693e0dd7f20e14454@ec2-52-17-53-249.eu-west-1.compute.amazonaws.com:5432/dakpive03cllcj
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://tmevcpalijcgdr:d512b826b1bf39a3a1bbd437db05602b3fde63a888ca9a9693e0dd7f20e14454@ec2-52-17-53-249.eu-west-1.compute.amazonaws.com:5432/dakpive03cllcj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
