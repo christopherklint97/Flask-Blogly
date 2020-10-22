@@ -1,11 +1,11 @@
 import os
 from unittest import TestCase
 from app import app
-from models import db, User
+from models import db, User, Post
 
 
 # Use test database and don't clutter tests with SQL
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('TEST_DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('TEST_DATABASE_URL')
 app.config['SQLALCHEMY_ECHO'] = False
 
 # Make Flask errors be real errors, rather than HTML pages with error info
@@ -23,8 +23,6 @@ class UserViewsTestCase(TestCase):
 
     def setUp(self):
         """Add sample user."""
-
-        User.query.delete()
 
         user = User(first_name="John", last_name="Appleseed")
         db.session.add(user)
@@ -62,3 +60,47 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Jessica Jones", html)
+
+
+class PostViewsTestCase(TestCase):
+    """Tests for views for Post."""
+
+    def setUp(self):
+        """Add sample post and user."""
+
+        user = User(first_name="Bob", last_name="Dillan")
+        post = Post(title="This is a test",
+                    content="This is also a test", author_id=1)
+
+        db.session.add(user)
+        db.session.add(post)
+        db.session.commit()
+
+        self.user_id = user.id
+        self.post_id = post.id
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+    def test_show_post(self):
+        with app.test_client() as client:
+            resp = client.get(f"/users/1")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                'This is a test', html)
+
+    def test_add_post(self):
+        with app.test_client() as client:
+            data = {"title": "Status update", "content": "Just got out of the shower, yay me!",
+                    "author_id": 1}
+            resp = client.post("/users/1/posts/new",
+                               data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(
+                'Status update', html)
