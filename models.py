@@ -74,3 +74,52 @@ class Post(db.Model):
         """ Show nicely formatted date """
 
         return self.created_at.strftime('%a %b %-d %Y, %-H:%M')
+
+
+""" Tags table """
+
+
+class Tag(db.Model):
+    """Tag."""
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.String(20), unique=True,
+                     nullable=False)
+
+    posts = db.relationship(
+        'Post',
+        secondary="posts_tags",
+        cascade="all,delete",
+        backref="tags",
+    )
+
+    def __repr__(self):
+        """Show info about post."""
+
+        t = self
+        return f"<Tag {t.id} {t.title} {t.content} {t.created_at}>"
+
+
+""" PostTags table """
+
+
+class PostTag(db.Model):
+    """PostTag."""
+
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True,
+                        nullable=False)
+
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True,
+                       nullable=False)
+
+    def __repr__(self):
+        """Show info about posts and tags."""
+
+        pt = self
+        return f"<PostTag {pt.id} {pt.tag_id}>"

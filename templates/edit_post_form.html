@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} New User {% endblock %}
+{% block title %} Edit Post {% endblock %}
 
 {% block content %}
 <h1>Edit post</h1>
@@ -13,6 +13,34 @@
         <label for="content">Content</label>
         <input type="input" class="form-control" id="content" name="content" value='{{ post.content }}' required>
     </div>
+    {% if tags %}
+
+    {% for tag in tags}
+    {% for post_tag in post.tags}
+
+    {% if tag == post_tag %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="{{tag.name}}" checked>
+        <label class="form-check-label" for="{{tag.name}}">
+            {{tag.name}}
+        </label>
+    </div>
+    {% else %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="{{tag.name}}">
+        <label class="form-check-label" for="{{tag.name}}">
+            {{tag.name}}
+        </label>
+    </div>
+    {% endif %}
+
+    {% endfor %}
+    {% endfor %}
+
+    {% else %}
+    <a href="/tags/new" class="btn btn-outline-dark">Create tags</a>
+
+    {% endif %}
     <a href="/users/{{post.author_id}}" class="btn btn-primary">Cancel</a>
     <input type="submit" class="btn btn-success" value="Edit">
 </form>

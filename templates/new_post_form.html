@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} New User {% endblock %}
+{% block title %} New Post {% endblock %}
 
 {% block content %}
 <h1>Add post for {{ user.fullname() }}</h1>
@@ -13,6 +13,18 @@
         <label for="content">Content</label>
         <textarea name="content" id="content" cols="30" rows="5" class="form-control" required></textarea>
     </div>
+    {% if tags %}
+    {% for tag in tags}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="{{tag.id}}" name="tags" id="{{tag.name}}">
+        <label class="form-check-label" for="tags">
+            {{tag.name}}
+        </label>
+    </div>
+    {% endfor %}
+    {% else %}
+    <a href="/tags/new" class="btn btn-outline-dark">Create tags</a>
+    {% endif %}
     <a href="/user/{{user.id}}" class="btn btn-primary">Cancel</a>
     <button type="submit" class="btn btn-success">Add</button>
 </form>
