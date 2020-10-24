@@ -128,7 +128,8 @@ def submit_new_post_form(user_id):
 
     title = request.form['title']
     content = request.form['content']
-    tags = request.form.getlist('tags')
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     post = Post(title=title, content=content, author_id=user_id, tags=tags)
 
     db.session.add(post)
@@ -152,8 +153,12 @@ def show_edit_posts(post_id):
     """Show form to edit a post, and to cancel."""
 
     post = Post.query.get_or_404(post_id)
+    try:
+        tags = Tag.query.all()
+    except NameError:
+        return render_template("edit_post_form.html", post=post)
 
-    return render_template("edit_post_form.html", post=post)
+    return render_template("edit_post_form.html", post=post, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit", methods=['POST'])
@@ -163,6 +168,8 @@ def submit_edit_posts(post_id):
     post = Post.query.get_or_404(post_id)
     post.title = request.form['title']
     post.content = request.form['content']
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     post.created_at = datetime.now()
 
     db.session.add(post)
@@ -196,7 +203,7 @@ def list_tags():
 
 
 @app.route("/tags/<int:tag_id>")
-def show_posts(tag_id):
+def show_tag(tag_id):
     """Show detail about a tag."""
 
     tag = Tag.query.get_or_404(tag_id)

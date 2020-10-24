@@ -8,12 +8,13 @@
 {% if tags %}
 <ul>
     {% for tag in tags %}
-    <li><a href="/">{{ tag.name }}</a></li>
+    <li><a href="/tags/{{tag.id}}">{{ tag.name }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
 <p>Create your first tag below</p>
 {% endif %}
+<a href="/" class="btn btn-dark">Home</a>
 <a href="/tags/new" class="btn btn-primary">Add tag</a>
 
 {% endblock %}

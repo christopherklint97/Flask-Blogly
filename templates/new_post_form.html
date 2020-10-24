@@ -14,10 +14,10 @@
         <textarea name="content" id="content" cols="30" rows="5" class="form-control" required></textarea>
     </div>
     {% if tags %}
-    {% for tag in tags}
+    {% for tag in tags %}
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="{{tag.id}}" name="tags" id="{{tag.name}}">
-        <label class="form-check-label" for="tags">
+        <input class="form-check-input" type="checkbox" value="{{ tag.id }}" id="tag_{{ tag.id }}" name="tags">
+        <label class="form-check-label" for="tag_{{ tag.id }}">
             {{tag.name}}
         </label>
     </div>
@@ -25,8 +25,8 @@
     {% else %}
     <a href="/tags/new" class="btn btn-outline-dark">Create tags</a>
     {% endif %}
-    <a href="/user/{{user.id}}" class="btn btn-primary">Cancel</a>
-    <button type="submit" class="btn btn-success">Add</button>
+    <a href="/user/{{user.id}}" class="btn btn-primary mt-4">Cancel</a>
+    <button type="submit" class="btn btn-success mt-4">Add</button>
 </form>
 
 {% endblock %}

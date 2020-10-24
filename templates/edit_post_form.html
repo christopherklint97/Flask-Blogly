@@ -15,34 +15,24 @@
     </div>
     {% if tags %}
 
-    {% for tag in tags}
-    {% for post_tag in post.tags}
+    {% for tag in tags %}
 
-    {% if tag == post_tag %}
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="{{tag.name}}" checked>
-        <label class="form-check-label" for="{{tag.name}}">
+        <input class="form-check-input" type="checkbox" value="{{ tag.id }}" id="tag_{{ tag.id }}"
+            {% if tag in post.tags %}checked{% endif %} name="tags">
+        <label class="form-check-label" for="tag_{{ tag.id }}">
             {{tag.name}}
         </label>
     </div>
-    {% else %}
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="{{tag.name}}">
-        <label class="form-check-label" for="{{tag.name}}">
-            {{tag.name}}
-        </label>
-    </div>
-    {% endif %}
 
-    {% endfor %}
     {% endfor %}
 
     {% else %}
     <a href="/tags/new" class="btn btn-outline-dark">Create tags</a>
 
     {% endif %}
-    <a href="/users/{{post.author_id}}" class="btn btn-primary">Cancel</a>
-    <input type="submit" class="btn btn-success" value="Edit">
+    <a href="/users/{{post.author_id}}" class="btn btn-primary mt-4">Cancel</a>
+    <input type="submit" class="btn btn-success mt-4" value="Save">
 </form>
 
 {% endblock %}
